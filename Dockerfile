@@ -3,6 +3,7 @@ FROM node:18 AS build
 WORKDIR /app
 COPY . .
 
+RUN npm install -g npm@10.5.0
 RUN npm ci
 RUN npm run build
 
