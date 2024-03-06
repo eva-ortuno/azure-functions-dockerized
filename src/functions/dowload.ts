@@ -46,8 +46,8 @@ export async function httpDownload(request: HttpRequest, context: InvocationCont
     };
 }
 
-app.http("post-download", {
-    route: "/download",
+app.http("getDownload", {
+    route: "download",
     methods: ["GET"],
     authLevel: "anonymous",
     handler: httpDownload,

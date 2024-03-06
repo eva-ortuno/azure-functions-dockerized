@@ -4,8 +4,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "ACCOUNT_NAME": "test",
-    "ACCOUNT_KEY": "test",
+    "BLOB_CONNECTION_STRING": "test",
     "CONTAINER_NAME": "test"
   }
 }
