@@ -5,6 +5,7 @@
     "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "BLOB_CONNECTION_STRING": "test",
-    "CONTAINER_NAME": "test"
+    "CONTAINER_NAME": "test",
+    "LOG_LEVEL": "debug"
   }
 }

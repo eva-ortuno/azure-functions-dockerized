@@ -1,24 +1,23 @@
 import type {HttpResponseInit, InvocationContext} from "@azure/functions";
 import { app } from "@azure/functions";
 import {HttpRequest} from "@azure/functions/types/http";
-import {BlobServiceClient, StorageSharedKeyCredential} from "@azure/storage-blob";
+import {BlobServiceClient} from "@azure/storage-blob";
 import {getConfig} from "../lib/getConfig";
 
-/**
- * This endpoint is used for communication between our different APIs. As of now, proper KYC data are required to create wallets in Custody API and accounts in Settlement API.
- * This endpoint is responsible to provide to those APIs a validation whether the customer has provided the proper KYC data or not. If no customer is found then the wallet/account can not be created.
- *
- * As this is a purely internal use, this endpoint is not deployed to the APIM and therefore not available via the productive URL (api.tangany.com/customers). This endpoint is only reachable via the direct URL of the function. This is also why the authentication is done thanks to a token that has been saved in all APIs and has to match to proceed with the data collection.
- */
+interface UploadBody {
+    version: string,
+    file: string,
+}
+
 export async function httpUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     const containerName = getConfig("CONTAINER_NAME");
     const blobServiceClient = BlobServiceClient.fromConnectionString(getConfig("BLOB_CONNECTION_STRING"));
     const containerClient = blobServiceClient.getContainerClient(containerName);
 
-    const form = await request.formData();
-
-    const version = form.get("version");
-    const file = form.get("file");
+    const jsonBody = await request.json() as UploadBody;
+    console.log("<<<<<<<<<<<<<<< jsonBody : ", jsonBody);
+    const version = jsonBody.version;
+    const file = jsonBody.file;
 
     if (!file || !version) {
         return {
@@ -28,10 +27,9 @@ export async function httpUpload(request: HttpRequest, context: InvocationContex
     }
 
     const fileName = `${new Date()}_${version}.txt`;
-    const fileContent = await file.arrayBuffer()
 
     const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-    const uploadBlobResponse = await blockBlobClient.uploadData();
+    const uploadBlobResponse = await blockBlobClient.uploadData(Buffer.from(file, "utf-8"));
     console.log(uploadBlobResponse)
     return {
         status: 200,
