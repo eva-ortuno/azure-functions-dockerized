@@ -1,8 +1,7 @@
 import type { HttpResponseInit, InvocationContext } from "@azure/functions";
 import { app } from "@azure/functions";
 import { HttpRequest } from "@azure/functions/types/http";
-import { BlobServiceClient } from "@azure/storage-blob";
-import { getConfig } from "../lib/getConfig";
+import {getBlobClient} from "../lib/getBlobClient";
 
 interface UploadBody {
   version: string;
@@ -10,10 +9,6 @@ interface UploadBody {
 }
 
 export async function httpUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const containerName = getConfig("CONTAINER_NAME");
-  const blobServiceClient = BlobServiceClient.fromConnectionString(getConfig("BLOB_CONNECTION_STRING"));
-  const containerClient = blobServiceClient.getContainerClient(containerName);
-
   const { version, file } = (await request.json()) as UploadBody;
   if (!file || !version) {
     return {
@@ -24,7 +19,7 @@ export async function httpUpload(request: HttpRequest, context: InvocationContex
 
   const fileName = `${new Date().toDateString()}_${version}.txt`;
 
-  const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+  const blockBlobClient = getBlobClient(fileName);
   await blockBlobClient.uploadData(Buffer.from(file, "utf-8"));
 
   return {
