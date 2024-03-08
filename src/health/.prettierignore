@@ -1,0 +1,10 @@
+**/.idea
+**/.vscode
+**/.yarn
+**/.next
+dist
+.eslintcache
+**/tmp
+test/e2e/customersApi/**
+scripts/portman/portman-config.ext.yaml
+arm-templates/**

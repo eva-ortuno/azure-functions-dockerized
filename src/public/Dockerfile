@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.2
 FROM node:18 AS build
 WORKDIR /app
-COPY . .
+COPY ../.. .
 
 RUN npm install -g npm@10.5.0
 RUN npm ci

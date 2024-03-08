@@ -2,8 +2,16 @@
   "name": "public",
   "version": "1.0.0",
   "description": "",
+  "main": "dist/public/functions/*.js",
   "scripts": {
+    "build": "tsc",
+    "build:clean": "rimraf dist",
+    "watch": "tsc -w",
+    "clean": "rimraf dist",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start",
     "lint": "prettier --write --cache . && eslint --fix --cache",
+    "test": "echo \"No tests yet...\"",
     "prepare": "husky"
   },
   "dependencies": {

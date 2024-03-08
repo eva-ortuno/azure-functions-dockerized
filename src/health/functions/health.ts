@@ -1,6 +1,6 @@
 import type { HttpResponseInit } from "@azure/functions";
 import { app } from "@azure/functions";
-import { helloWorld } from "../lib/lib";
+import { helloWorld } from "../../lib/lib";
 
 export async function httpHealthGet(): Promise<HttpResponseInit> {
   try {

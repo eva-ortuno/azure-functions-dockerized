@@ -1,7 +1,7 @@
 import type { HttpResponseInit, InvocationContext } from "@azure/functions";
 import { app } from "@azure/functions";
 import { HttpRequest } from "@azure/functions/types/http";
-import { getBlobClient } from "../lib/getBlobClient";
+import { getBlobClient } from "../../lib/getBlobClient";
 
 interface UploadBody {
   version: string;
