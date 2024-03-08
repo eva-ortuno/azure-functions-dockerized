@@ -4,8 +4,8 @@ This repo is a playground for Azure functions related topics. So far we have exp
 
 ### Create a docker to run the Function App from
 
-See [Dockerfile](src/public/Dockerfile). Background is deployment to Azure via Docker instead of using a zip archive in the
-pipelines. https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push
+See [Dockerfile](src/public/Dockerfile). Background is deployment to Azure via Docker instead of using a zip archive in
+the pipelines. https://learn.microsoft.com/en-us/azure/azure-functions/deployment-zip-push
 https://learn.microsoft.com/en-us/azure/azure-functions/functions-how-to-custom-container?tabs=core-tools%2Cacr%2Cazure-cli2%2Cazure-cli&pivots=azure-functions
 
 ### Upload and download data to a blob storage in Azure
