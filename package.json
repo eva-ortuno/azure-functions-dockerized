@@ -2,7 +2,7 @@
   "name": "azure-function-with-docker",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/functions/*.js",
+  "main": "dist/public/*.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:clean": "rimraf dist",
