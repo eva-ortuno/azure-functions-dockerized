@@ -1,20 +1,17 @@
 import type { HttpResponseInit, InvocationContext } from "@azure/functions";
 import { app } from "@azure/functions";
 import { HttpRequest } from "@azure/functions/types/http";
-import { BlobServiceClient, StorageSharedKeyCredential } from "@azure/storage-blob";
+import { BlobServiceClient } from "@azure/storage-blob";
 import { getConfig } from "../lib/getConfig";
 
 export async function httpDownload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const accountName = getConfig("ACCOUNT_NAME");
-  const accountKey = getConfig("ACCOUNT_KEY");
   const containerName = getConfig("CONTAINER_NAME");
+  const blobServiceClient = BlobServiceClient.fromConnectionString(getConfig("BLOB_CONNECTION_STRING"));
+  const containerClient = blobServiceClient.getContainerClient(containerName);
   const blobName = request.query.get("file");
 
   if (!blobName) throw new Error("No file name found");
 
-  const storageCredential = new StorageSharedKeyCredential(accountName, accountKey);
-  const blobServiceClient = new BlobServiceClient(`https://${accountName}.blob.core.windows.net`, storageCredential);
-  const containerClient = blobServiceClient.getContainerClient(containerName);
   const blobClient = containerClient.getBlockBlobClient(blobName);
 
   const downloadResponse = await blobClient.download();
@@ -26,13 +23,19 @@ export async function httpDownload(request: HttpRequest, context: InvocationCont
     };
   }
 
+  downloadResponse.readableStreamBody.setEncoding('utf8');
+  let content = '';
+  for await (const chunk of downloadResponse.readableStreamBody) {
+    content += chunk;
+  }
+
   return {
     status: 200,
     headers: {
       "Content-Type": "application/octet-stream", // Adjust content type as per your file type
       "Content-Disposition": `attachment; filename="${blobName}"`, // Force download by setting Content-Disposition header
     },
-    jsonBody: downloadResponse.readableStreamBody,
+    jsonBody: content,
   };
 }
 
