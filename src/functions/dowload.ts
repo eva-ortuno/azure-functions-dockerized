@@ -1,8 +1,8 @@
 import type { HttpResponseInit, InvocationContext } from "@azure/functions";
 import { app } from "@azure/functions";
 import { HttpRequest } from "@azure/functions/types/http";
-import {streamToText} from "../lib/streamToText";
-import {getBlobClient} from "../lib/getBlobClient";
+import { streamToText } from "../lib/streamToText";
+import { getBlobClient } from "../lib/getBlobClient";
 
 export async function httpDownload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const blobName = request.query.get("file");
@@ -19,7 +19,7 @@ export async function httpDownload(request: HttpRequest, context: InvocationCont
       body: "File not found.",
     };
   }
-  const content =  await streamToText(downloadResponse.readableStreamBody);
+  const content = await streamToText(downloadResponse.readableStreamBody);
 
   return {
     status: 200,
