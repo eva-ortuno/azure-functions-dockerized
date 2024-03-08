@@ -20,6 +20,8 @@ Let's imagine we have a same code base that would implement different endpoints 
 better to separate concerns but still keep the core functionalities to be duplicated if we, for example, split the
 repos. We are here looking into splitting several "APIs" while using Azure functions both times and the same repo.
 
+To explore : https://github.com/microsoft/vscode-azurefunctions/issues/2521
+
 ## To run this repo
 
 To run this repo, make sure you have installed globally [Azurite](https://www.npmjs.com/package/azurite).
