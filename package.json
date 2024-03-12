@@ -9,7 +9,7 @@
     "watch": "tsc -w",
     "clean": "rimraf dist",
     "prestart": "npm run clean && npm run build",
-    "start": "func start",
+    "start": "func start --typescript",
     "lint": "prettier --write --cache . && eslint --fix --cache",
     "test": "echo \"No tests yet...\"",
     "prepare": "husky"
