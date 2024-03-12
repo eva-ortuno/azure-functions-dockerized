@@ -1,8 +1,10 @@
 import type { HttpResponseInit, InvocationContext } from "@azure/functions";
 import { app } from "@azure/functions";
 import { HttpRequest } from "@azure/functions/types/http";
-import { streamToText } from "../lib/streamToText";
 import { getBlobClient } from "../lib/getBlobClient";
+
+import streamToString from "stream-to-string";
+import {streamToBuffer} from "../lib/streamToText";
 
 export async function httpDownload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
   const blobName = request.query.get("file");
@@ -19,11 +21,19 @@ export async function httpDownload(request: HttpRequest, context: InvocationCont
       body: "File not found.",
     };
   }
-  const content = await streamToText(downloadResponse.readableStreamBody);
+
+  const downloadedData = await streamToBuffer(downloadResponse.readableStreamBody);
+  // const base64EncodedPDF = Buffer.from(downloadedData).toString("base64");
+
+  // const pdfBuffer = downloadResponse.readableStreamBody.read();
 
   return {
     status: 200,
-    jsonBody: content,
+    headers: {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="${blobName}"`
+    },
+    body: downloadedData,
   };
 }
 
