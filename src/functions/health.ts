@@ -29,8 +29,8 @@ export async function httpHealthGet(): Promise<HttpResponseInit> {
   }
 }
 
-app.http("get-health", {
-  route: "health",
+app.http("get-functions", {
+  route: "functions",
   methods: ["GET"],
   authLevel: "anonymous",
   handler: httpHealthGet,
