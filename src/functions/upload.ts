@@ -5,13 +5,15 @@ import { getBlobClient } from "../lib/getBlobClient";
 
 interface UploadBody {
   version: string;
-  filePath: string;
+  fileContent: string;
 }
 
 export async function httpUpload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-  const { version, filePath } = (await request.json()) as UploadBody;
+  const formData = await request.formData();
+  const version = formData.get("version");
+  const file = formData.get("fileContent") as File | null;
 
-  if (!filePath || !version) {
+  if (!file || !version) {
     return {
       status: 400,
       body: "Version and file parameters are required in the request body.",
@@ -19,9 +21,10 @@ export async function httpUpload(request: HttpRequest, context: InvocationContex
   }
 
   const fileName = `${new Date().toDateString()}_${version}.pdf`;
+  const buffer = await file.arrayBuffer();
 
   const blockBlobClient = getBlobClient(fileName);
-  await blockBlobClient.uploadFile(filePath);
+  await blockBlobClient.uploadData(buffer);
 
   return {
     status: 200,
