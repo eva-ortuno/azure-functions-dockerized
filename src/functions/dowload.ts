@@ -6,6 +6,7 @@ import { getBlobClient } from "../lib/getBlobClient";
 import { streamToBuffer } from "../lib/streamToText";
 
 export async function httpDownload(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+  console.log("download");
   const blobName = request.query.get("file");
 
   if (!blobName) throw new Error("No file name found");
